@@ -37,7 +37,7 @@
 // lives
 #define LIVES 3
 
-//size of paddle in pixels 
+//size of paddle in pixels
 #define PADWIDTH 65
 #define PADHEIGHT 10
 
@@ -77,32 +77,32 @@ int main(void)
 
     // number of points initially
     int points = 0;
-    
+
     //ball velocity
-    double velocityY = (drand48()*3) + 1; 
+    double velocityY = (drand48()*3) + 1;
     double velocityX = 0;
-    
+
     //lives symbols
     GOval lifeCount1 = newGOval(5,HEIGHT-(RADIUS*2) , RADIUS,RADIUS);
     setFilled(lifeCount1,true);
     setColor(lifeCount1,"BLACK");
     add(window,lifeCount1);
-    
+
     GOval lifeCount2 = newGOval((RADIUS*2) + 5,HEIGHT-(RADIUS*2) , RADIUS,RADIUS);
     setFilled(lifeCount2,true);
     setColor(lifeCount2,"BLACK");
     add(window,lifeCount2);
-    
+
     // keep playing until game over
     while (lives > 0 && bricks > 0)
     {
         char s[3];
-        sprintf(s,"%i", bricks);
-        setLabel(label, s);
-        setLocation(label, WIDTH - getWidth(label) - 5, HEIGHT - 5);
+        // sprintf(s,"%i", bricks);
+        // setLabel(label, s);
+        // setLocation(label, WIDTH - getWidth(label) - 5, HEIGHT - 5);
         GObject object = detectCollision(window, ball);
         GEvent paddleMove = getNextEvent(MOUSE_EVENT);
-        
+
         if (paddleMove != NULL)
         {
             if (getEventType(paddleMove) == MOUSE_MOVED)
@@ -111,23 +111,23 @@ int main(void)
                 setLocation(paddle, paddleX, (HEIGHT-(PADHEIGHT*4)));
             }
         }
-      
+
         move(ball, velocityX, velocityY);
- 
+
         if (getX(ball) < 0 ||  getX(ball) + getWidth(ball) > getWidth(window))
         {
-            if (velocityX == 0) 
+            if (velocityX == 0)
             {
                 velocityX = drand48()*3 + 1;
             }
-            velocityX = -velocityX;   
+            velocityX = -velocityX;
         }
-        
+
         if(getY(ball) < 0)
         {
-            velocityY = -velocityY;    
+            velocityY = -velocityY;
         }
-        if (getY(ball) + RADIUS*2 >= HEIGHT) 
+        if (getY(ball) + RADIUS*2 >= HEIGHT)
         {
             velocityX = 0;
             lives--;
@@ -144,36 +144,36 @@ int main(void)
             setLocation(ball, WIDTH/2 - RADIUS, HEIGHT/2 - RADIUS);
             waitForClick();
         }
-        
+
         if (object != NULL)
-        { 
-            if (object == paddle && getX(ball) + RADIUS < getX(paddle) + PADWIDTH/2)             
+        {
+            if (object == paddle && getX(ball) + RADIUS < getX(paddle) + PADWIDTH/2)
             {
                 velocityX = drand48()*-3 - 1;
                 if(velocityY > 0)
                 {
                     velocityY = -velocityY;
                 }
-                if (velocityX == 0) 
+                if (velocityX == 0)
                 {
                     velocityX = drand48()*3 + 1;
                 }
             }
-        
+
             if (object == paddle && getX(ball) + RADIUS >= getX(paddle) + PADWIDTH/2)
             {
-                velocityX = drand48()*3 + 1; 
+                velocityX = drand48()*3 + 1;
                 if(velocityY > 0)
                 {
                     velocityY = -velocityY;
                 }
-                if (velocityX == 0) 
+                if (velocityX == 0)
                 {
                     velocityX = drand48()*3 + 1;
                 }
-                
+
             }
-            if (strcmp(getType(object), "GRect") == 0 && object != paddle && getX(ball) + RADIUS > getX(object) + BRICKWIDTH/2 )
+            if ((strcmp(getType(object), "GRect") == 0 && object != paddle && getX(ball) + RADIUS > getX(object) + BRICKWIDTH/2) || (strcmp(getType(object), "GRect") == 0 && object != paddle && getX(ball) + RADIUS <= getX(object) + BRICKWIDTH/2) )
             {
                 removeGWindow(window, object);
                 bricks--;
@@ -181,16 +181,6 @@ int main(void)
                 if (velocityX < 0)
                 {
                     velocityX = (drand48()*3 + 1);
-                }
-            }
-            if (strcmp(getType(object), "GRect") == 0 && object != paddle && getX(ball) + RADIUS <= getX(object) + BRICKWIDTH/2 )
-            {
-                removeGWindow(window, object);
-                bricks--;
-                velocityY = -velocityY;
-                if (velocityX > 0)
-                {
-                    velocityX = -(drand48()*3 + 1);
                 }
             }
         }
@@ -213,10 +203,10 @@ void initBricks(GWindow window)
     int space = 5;
     int brickSpotY =  BRICKHEIGHT*2;
     int brickSpotX = space;
-    
+
     for (int brickX = 0; brickX < ROWS; brickX++)
     {
-        for (int brickY = 0; brickY < COLS; brickY++) 
+        for (int brickY = 0; brickY < COLS; brickY++)
         {
             if (brickX == 0)
             {
@@ -225,7 +215,7 @@ void initBricks(GWindow window)
                 setColor(brick,"RED");
                 add(window,brick);
             }
-            
+
             if (brickX == 1)
             {
                 GRect brick = newGRect(brickSpotX, brickSpotY, BRICKWIDTH, BRICKHEIGHT);
@@ -233,7 +223,7 @@ void initBricks(GWindow window)
                 setColor(brick,"Orange");
                 add(window,brick);
             }
-            
+
             if (brickX == 2)
             {
                 GRect brick = newGRect(brickSpotX, brickSpotY, BRICKWIDTH, BRICKHEIGHT);
@@ -241,7 +231,7 @@ void initBricks(GWindow window)
                 setColor(brick,"YELLOW");
                 add(window,brick);
             }
-            
+
             if (brickX == 3)
             {
                 GRect brick = newGRect(brickSpotX, brickSpotY, BRICKWIDTH, BRICKHEIGHT);
@@ -249,7 +239,7 @@ void initBricks(GWindow window)
                 setColor(brick,"GREEN");
                 add(window,brick);
             }
-            
+
             if (brickX == 4)
             {
                 GRect brick = newGRect(brickSpotX, brickSpotY, BRICKWIDTH, BRICKHEIGHT);
@@ -257,10 +247,10 @@ void initBricks(GWindow window)
                 setColor(brick,"BLUE");
                 add(window,brick);
             }
-            
+
             brickSpotX += BRICKWIDTH + space;
         }
-        
+
         brickSpotY += BRICKHEIGHT + space;
         brickSpotX = space;
     }
